@@ -10,6 +10,10 @@ export class Map {
     this._mapCol = mapCol;
   }
 
+  get mapArray(): number[][] {
+    return this._mapArray;
+  }
+
   initMap(): void {
     for (let i = 0; i < this._mapRow; i++) {
       this._mapArray.push([]);
@@ -21,12 +25,13 @@ export class Map {
 
   render(shape: Shape) {
     this.reset();
-
     for (let i = 0; i < shape.boxArray.length; i++) {
       for (let j = 0; j < shape.boxArray[0].length; j++) {
         const row = i + shape.y;
         const col = j + shape.x;
-        this._mapArray[row][col] = 1;
+        if (shape.boxArray[i][j]) {
+          this._mapArray[row][col] = 1;
+        }
       }
     }
   }
@@ -34,7 +39,19 @@ export class Map {
   reset() {
     for (let i = 0; i < this._mapRow; i++) {
       for (let j = 0; j < this._mapCol; j++) {
-        if (this._mapArray[i][j]) this._mapArray[i][j] = 0;
+        if (this._mapArray[i][j] > 0) this._mapArray[i][j] = 0;
+      }
+    }
+  }
+
+  saveHitBottomShape(shape: Shape) {
+    for (let i = 0; i < shape.boxArray.length; i++) {
+      for (let j = 0; j < shape.boxArray[0].length; j++) {
+        const row = i + shape.y;
+        const col = j + shape.x;
+        if (shape.boxArray[i][j]) {
+          this._mapArray[row][col] = -1;
+        }
       }
     }
   }
