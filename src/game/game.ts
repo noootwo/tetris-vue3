@@ -3,7 +3,7 @@ import { Map } from "./map";
 import { Shape } from "./shape";
 import { Ticker } from "./ticker";
 
-import { hitBottomBoundary } from "./hit";
+import { hitBottomBoundary, hitBottomBox } from "./hit";
 
 export class Game {
   private _map: Map;
@@ -50,7 +50,7 @@ export class Game {
   }
 
   moveDown() {
-    if (hitBottomBoundary.call(this)) {
+    if (hitBottomBoundary.call(this) || hitBottomBox.call(this)) {
       this._map.saveHitBottomShape(this._activeShape);
       this.createShape();
 
