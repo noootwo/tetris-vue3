@@ -29,7 +29,7 @@ export class Map {
       for (let j = 0; j < shape.boxArray[0].length; j++) {
         const row = i + shape.y;
         const col = j + shape.x;
-        if (shape.boxArray[i][j]) {
+        if (shape.boxArray[i][j] && row >= 0) {
           this._mapArray[row][col] = 1;
         }
       }
@@ -45,14 +45,27 @@ export class Map {
   }
 
   saveHitBottomShape(shape: Shape) {
-    for (let i = 0; i < shape.boxArray.length; i++) {
-      for (let j = 0; j < shape.boxArray[0].length; j++) {
-        const row = i + shape.y;
-        const col = j + shape.x;
-        if (shape.boxArray[i][j]) {
-          this._mapArray[row][col] = -1;
+    return new Promise((resolve, reject) => {
+      for (let i = 0; i < shape.boxArray.length; i++) {
+        for (let j = 0; j < shape.boxArray[0].length; j++) {
+          const row = i + shape.y;
+          const col = j + shape.x;
+          if (shape.boxArray[i][j]) {
+            this._mapArray[row][col] = -1;
+          }
         }
       }
-    }
+      resolve(1);
+    });
+  }
+
+  eliminateLine() {
+    this._mapArray.forEach((line, index) => {
+      const boo = line.every((item) => item === -1);
+      if (boo) {
+        this._mapArray.splice(index, 1);
+        this._mapArray.unshift(new Array(this._mapCol).fill(0));
+      }
+    });
   }
 }

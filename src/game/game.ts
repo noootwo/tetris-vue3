@@ -3,7 +3,12 @@ import { Map } from "./map";
 import { Shape } from "./shape";
 import { Ticker } from "./ticker";
 
-import { hitBottomBoundary, hitBottomBox } from "./hit";
+import {
+  hitBottomBoundary,
+  hitBottomBox,
+  hitHorizontalBoundary,
+  hitHorizontalBox,
+} from "./hit";
 
 export class Game {
   private _map: Map;
@@ -34,7 +39,6 @@ export class Game {
 
   createShape() {
     this._activeShape = new Shape();
-    console.log(this._activeShape);
     return this.startMoveDown();
   }
 
@@ -49,9 +53,10 @@ export class Game {
     return this._timer;
   }
 
-  moveDown() {
+  async moveDown() {
     if (hitBottomBoundary.call(this) || hitBottomBox.call(this)) {
-      this._map.saveHitBottomShape(this._activeShape);
+      await this._map.saveHitBottomShape(this._activeShape);
+      this._map.eliminateLine();
       this.createShape();
 
       clearInterval(this._timer);
@@ -59,7 +64,15 @@ export class Game {
       return;
     }
     this._activeShape.y++;
-    // this._map.render(this._activeShape);
+  }
+
+  horizontalMove(type: string) {
+    if (
+      hitHorizontalBoundary.call(this, type) ||
+      hitHorizontalBox.call(this, type)
+    )
+      return;
+    this._activeShape.x += type === "left" ? -1 : 1;
   }
 
   initEventListener() {
@@ -69,12 +82,13 @@ export class Game {
           this.moveDown();
           break;
         case "ArrowUp":
+          this._activeShape.rotateShape();
           break;
         case "ArrowLeft":
-          this._activeShape.x--;
+          this.horizontalMove("left");
           break;
         case "ArrowRight":
-          this._activeShape.x++;
+          this.horizontalMove("right");
           break;
       }
     });

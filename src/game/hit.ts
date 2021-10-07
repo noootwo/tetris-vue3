@@ -1,4 +1,9 @@
-import { getBottomPoints } from "./matrix";
+import { mapCol } from "../config";
+import {
+  getBottomPoints,
+  getHorizontalPoints,
+  getHorizontalIndex,
+} from "./matrix";
 
 export function hitBottomBoundary(this: any) {
   const points: any[] = getBottomPoints(this._activeShape.boxArray);
@@ -17,6 +22,25 @@ export function hitBottomBox(this: any) {
     const row = point.y + this._activeShape.y + 1;
     const col = point.x + this._activeShape.x;
 
-    return this._map.mapArray[row][col] === -1;
+    return this._map.mapArray[row >= 0 ? row : 0][col] === -1;
+  });
+}
+
+export function hitHorizontalBoundary(this: any, type: string) {
+  const index = getHorizontalIndex(this._activeShape.boxArray, type);
+  return (
+    0 > this._activeShape.x + index - 1 ||
+    this._activeShape.x + index + 2 > this._map._mapCol
+  );
+}
+
+export function hitHorizontalBox(this: any, type: string) {
+  const points = getHorizontalPoints(this._activeShape.boxArray, type);
+
+  return points.some((point) => {
+    const row = point.y + this._activeShape.y;
+    const col = point.x + this._activeShape.x + (type === "left" ? -1 : 1);
+
+    return row > 0 && this._map.mapArray[row][col] === -1;
   });
 }
