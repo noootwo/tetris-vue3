@@ -1,3 +1,5 @@
+import { Ref } from "@vue/reactivity";
+
 import { Shape } from "./shape";
 
 export class Map {
@@ -12,6 +14,14 @@ export class Map {
 
   get mapArray(): number[][] {
     return this._mapArray;
+  }
+
+  get mapCol(): number {
+    return this._mapCol;
+  }
+
+  get mapRow(): number {
+    return this._mapRow;
   }
 
   initMap(): void {
@@ -59,12 +69,13 @@ export class Map {
     });
   }
 
-  eliminateLine() {
+  eliminateLine(score: Ref<number>) {
     this._mapArray.forEach((line, index) => {
       const boo = line.every((item) => item === -1);
       if (boo) {
         this._mapArray.splice(index, 1);
         this._mapArray.unshift(new Array(this._mapCol).fill(0));
+        score.value += 10;
       }
     });
   }

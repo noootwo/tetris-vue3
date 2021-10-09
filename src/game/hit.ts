@@ -28,10 +28,12 @@ export function hitBottomBox(this: any) {
 
 export function hitHorizontalBoundary(this: any, type: string) {
   const index = getHorizontalIndex(this._activeShape.boxArray, type);
-  return (
-    0 > this._activeShape.x + index - 1 ||
-    this._activeShape.x + index + 2 > this._map._mapCol
-  );
+
+  if (type === "left") {
+    return 0 > this._activeShape.x + index - 1;
+  } else {
+    return this._activeShape.x + index + 2 > this._map._mapCol;
+  }
 }
 
 export function hitHorizontalBox(this: any, type: string) {

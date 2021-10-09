@@ -1,3 +1,5 @@
+import { Ref } from "@vue/reactivity";
+
 import * as gameConfig from "../config";
 import { Map } from "./map";
 import { Shape } from "./shape";
@@ -16,8 +18,10 @@ export class Game {
   private _ticker: Ticker;
   private _timer: any;
   private _speed: number = gameConfig.timeInterval;
+  private _score: Ref<number>;
 
-  constructor(mapArray: any[]) {
+  constructor(mapArray: any[], score: Ref<number>) {
+    this._score = score;
     this._map = new Map(mapArray, gameConfig.mapRow, gameConfig.mapCol);
     this._ticker = new Ticker();
   }
@@ -56,7 +60,7 @@ export class Game {
   async moveDown() {
     if (hitBottomBoundary.call(this) || hitBottomBox.call(this)) {
       await this._map.saveHitBottomShape(this._activeShape);
-      this._map.eliminateLine();
+      this._map.eliminateLine(this._score);
       this.createShape();
 
       clearInterval(this._timer);
@@ -82,7 +86,7 @@ export class Game {
           this.moveDown();
           break;
         case "ArrowUp":
-          this._activeShape.rotateShape();
+          this._activeShape.rotateShape(this._map);
           break;
         case "ArrowLeft":
           this.horizontalMove("left");
