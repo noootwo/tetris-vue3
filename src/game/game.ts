@@ -24,6 +24,8 @@ export class Game {
     this._score = score;
     this._map = new Map(mapArray, gameConfig.mapRow, gameConfig.mapCol);
     this._ticker = new Ticker();
+
+    this._map.initMap();
   }
 
   get activeShape(): Shape {
@@ -35,7 +37,6 @@ export class Game {
   }
 
   startGame() {
-    this._map.initMap();
     this.initEventListener();
     this.createShape();
     this._ticker.addTicker(this.handleTicker.bind(this));

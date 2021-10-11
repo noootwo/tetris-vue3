@@ -14,18 +14,10 @@ import Box from './Box.vue'
 import { mapRow, mapCol } from '../config'
 import { initSelfGame } from '../game'
 import { reactive, ref } from '@vue/reactivity'
-import { watch } from '@vue/runtime-core'
 
 const score = ref(0)
 
 const mapArray = reactive([])
-
-watch(
-  () => score,
-  (newVal) => {
-    console.log(newVal)
-  }
-)
 
 initSelfGame(mapArray, score)
 </script>
