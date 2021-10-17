@@ -1,5 +1,5 @@
 <template>
-  <div class="box">{{type}}</div>
+  <div class="box"></div>
 </template>
 
 <script setup lang="ts">

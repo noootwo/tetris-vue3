@@ -37,7 +37,6 @@ export class Game {
   }
 
   startGame() {
-    this.initEventListener();
     this.createShape();
     this._ticker.addTicker(this.handleTicker.bind(this));
   }
@@ -80,22 +79,7 @@ export class Game {
     this._activeShape.x += type === "left" ? -1 : 1;
   }
 
-  initEventListener() {
-    window.addEventListener("keydown", (e) => {
-      switch (e.code) {
-        case "ArrowDown":
-          this.moveDown();
-          break;
-        case "ArrowUp":
-          this._activeShape.rotateShape(this._map);
-          break;
-        case "ArrowLeft":
-          this.horizontalMove("left");
-          break;
-        case "ArrowRight":
-          this.horizontalMove("right");
-          break;
-      }
-    });
+  rotateShape() {
+    this._activeShape.rotateShape(this._map);
   }
 }

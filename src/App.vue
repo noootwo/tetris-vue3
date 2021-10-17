@@ -8,9 +8,22 @@ function startGame() {
 </script>
 
 <template>
-  <Game></Game>
-  <button @click="startGame">start game</button>
+  <div class="body">
+    <div class="gameWrapper">
+      <Game type="self"></Game>
+      <button @click="startGame">start game</button>
+    </div>
+    <div class="gameWrapper">
+      <Game type="rival"></Game>
+    </div>
+  </div>
 </template>
 
 <style>
+.body {
+  display: flex;
+}
+.gameWrapper {
+  margin-right: 20px;
+}
 </style>
