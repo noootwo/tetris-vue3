@@ -13,6 +13,27 @@ const io = new Server(httpServer, {
 
 io.on("connection", (socket) => {
   // ...
+  console.log("有人来了");
+
+  socket.on("down", () => {
+    console.log("down");
+    io.emit("down");
+  });
+
+  socket.on("rotate", () => {
+    console.log("rotate");
+    io.emit("rotate");
+  });
+
+  socket.on("left", () => {
+    console.log("left");
+    io.emit("left");
+  });
+
+  socket.on("right", () => {
+    console.log("right");
+    io.emit("right");
+  });
 });
 
 httpServer.listen(3001);
